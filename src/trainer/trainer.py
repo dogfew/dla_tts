@@ -10,12 +10,16 @@ from torchvision.transforms import ToTensor
 from tqdm import tqdm
 
 from src.base import BaseTrainer
-from src.logger.utils import plot_spectrogram_to_buf, plot_spectrogram_and_pitch_and_energy_to_buf
+from src.logger.utils import (
+    plot_spectrogram_to_buf,
+    plot_spectrogram_and_pitch_and_energy_to_buf,
+)
 from src.synthesis.synthesis import Synthesizer
 from src.utils import inf_loop, MetricTracker
 from torch.cuda.amp import GradScaler
 from src.utils import optional_autocast
 from src.waveglow import utils
+from utils.beautiful_phonemes import arpabet_to_ipa
 
 
 class Trainer(BaseTrainer):
@@ -161,10 +165,16 @@ class Trainer(BaseTrainer):
             "learning rate",
             self.optimizer.state_dict()["param_groups"][0]["lr"],
         )
+        arpa_phonemes = [
+            self.synthesizer.inv_symbols.get(x, " ")
+            for x in batch["raw_text"][0].cpu().tolist()
+        ]
         raw_text = " ".join(
             [
-                self.synthesizer.inv_symbols.get(x, "<>")
-                for x in batch["raw_text"][0].cpu().tolist()
+                arpabet_to_ipa.get(
+                    arpa_phoneme, arpabet_to_ipa.get(arpa_phoneme[:-1], "<?>")
+                )
+                for arpa_phoneme in arpa_phonemes
             ]
         )
         audio, audio_waveglow = self.synthesizer.train_log(
@@ -253,6 +263,7 @@ class Trainer(BaseTrainer):
     @staticmethod
     def make_image(buff):
         return ToTensor()(PIL.Image.open(buff))
+
     #
     # @torch.no_grad()
     # def _log_spectrogram(self, batch):
@@ -282,14 +293,28 @@ class Trainer(BaseTrainer):
                 .transpose(1, 0)
             )
             spectrogram = torch.nan_to_num(spectrogram)
-            pitch = batch[f"pitch{spectrogram_type if spectrogram_type == '_target' else '_predicted'}"][0].detach().cpu()
-            energy = batch[f"energy{spectrogram_type if spectrogram_type == '_target' else '_predicted'}"][0].detach().cpu()
-            if spectrogram_type == '_target':
+            pitch = (
+                batch[
+                    f"pitch{spectrogram_type if spectrogram_type == '_target' else '_predicted'}"
+                ][0]
+                .detach()
+                .cpu()
+            )
+            energy = (
+                batch[
+                    f"energy{spectrogram_type if spectrogram_type == '_target' else '_predicted'}"
+                ][0]
+                .detach()
+                .cpu()
+            )
+            if spectrogram_type == "_target":
                 pitch = pitch.log1p()
                 energy = energy.log1p()
             pitch = pitch.numpy()
             energy = energy.numpy()
-            buf = plot_spectrogram_and_pitch_and_energy_to_buf(spectrogram, pitch, energy)
+            buf = plot_spectrogram_and_pitch_and_energy_to_buf(
+                spectrogram, pitch, energy
+            )
             self.writer.add_image(
                 f"{spectrogram_type or 'pred'}",
                 Trainer.make_image(buf),

@@ -50,23 +50,23 @@
       "pct_start": 0.1,
       "anneal_strategy": "cos",
       "max_lr": 1e-3,
-      "epochs": 1802,
-      "steps_per_epoch": 200
+      "epochs": 502,
+      "steps_per_epoch": 400
     }
   },
   "trainer": {
-    "epochs": 1800,
+    "epochs": 500,
     "save_dir": "saved/",
-    "save_period": 40,
+    "save_period": 25,
     "verbosity": 2,
     "monitor": "min train_loss",
-    "early_stop": 100,
+    "early_stop": 1000,
     "visualize": "wandb",
     "wandb_project": "tts_project",
     "grad_norm_clip": 1,
     "log_predictions_step_epoch": 5,
     "mixed_precision": true,
     "accumulation_steps":1,
-    "len_epoch": 200
+    "len_epoch": 400
   }
 }

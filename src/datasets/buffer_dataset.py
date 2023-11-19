@@ -6,6 +6,7 @@ import time
 import os
 import numpy as np
 
+
 def process_text(train_text_path):
     with open(train_text_path, "r", encoding="utf-8") as f:
         txt = []
