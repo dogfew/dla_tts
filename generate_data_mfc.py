@@ -10,6 +10,7 @@ import src.utils.audio.tools as tools
 from iteround import saferound
 import argparse
 
+
 def count_stats(feature_dir):
     max_value = np.finfo(np.float64).min
     min_value = np.finfo(np.float64).max
@@ -19,12 +20,14 @@ def count_stats(feature_dir):
         min_value = min(min_value, min(data))
     print(f"Min: {min_value}\nMax: {max_value}\n")
 
+
 def calculate_durations(textgrid_file):
     tg = textgrid.TextGrid.fromFile(textgrid_file)
     durations = []
     phonemes = []
     for interval in tg[1].intervals:
-        duration = (interval.maxTime - interval.minTime) * 86.1328125 # it is the same as / 0.016
+        # this is constant for consistency of durations with other things
+        duration = (interval.maxTime - interval.minTime) * 86.1328125
         durations.append(duration)
         phonemes.append(interval.mark)
     durations = np.array(durations)
@@ -62,7 +65,7 @@ def main(dataset_dir, output_dir="train_data", textgrid_dir='ljs_aligned2'):
                 wav_path = Path(dataset_dir2) / f"{wave_path}.wav"
                 mel, pitch, energy = extract_features(str(wav_path))
             except FileNotFoundError:
-                print(f"MFA could not generate alignments for {wav_path}. Skipping!")
+                print(f"MFA could not generate alignments for {wave_path}. Skipping!")
                 continue
             texts.append(phonemes)
             total_duration = durations.sum().astype(int)
@@ -91,8 +94,8 @@ if __name__ == "__main__":
                         help='Directory of the dataset')
     parser.add_argument('--output_dir', type=str, default="train_data",
                         help='Output directory (default: train_data)')
-    parser.add_argument('--textgrid_dir', type=str, default='ljs_aligned',
-                        help='TextGrid directory (default: ljs_aligned)')
+    parser.add_argument('--textgrid_dir', type=str, default='ljs_aligned2',
+                        help='TextGrid directory (default: ljs_aligned2)')
 
     args = parser.parse_args()
     main(args.dataset_dir, args.output_dir, args.textgrid_dir)

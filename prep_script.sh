@@ -18,7 +18,7 @@ mv waveglow_256channels_ljs_v2.pt waveglow/pretrained_model/waveglow_256channels
 #echo $(ls mels | wc -l)
 
 gdown 1Vtqk3tE3hcp2cZI76HCipD18jLStVBeP
-unzip MFA.zip
+unzip -q MFA.zip
 python generate_data_mfc.py
 #download alignments
 #wget https://github.com/xcmyz/FastSpeech/raw/master/alignments.zip

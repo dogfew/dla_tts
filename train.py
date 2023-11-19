@@ -47,10 +47,7 @@ def main(config):
             loss_module = torch.compile(loss_module, mode='reduce-overhead')
         except Exception:
             print("Could not compile loss")
-    metrics = [
-        config.init_obj(metric_dict, module_metric)
-        for metric_dict in config["metrics"]
-    ]
+    metrics = []
 
     # build optimizer, learning rate scheduler. delete every line containing lr_scheduler for
     # disabling scheduler
@@ -59,7 +56,7 @@ def main(config):
     lr_scheduler = config.init_obj(
         config["lr_scheduler"], torch.optim.lr_scheduler, optimizer
     )
-    print("Num params", sum(p.numel() for p in model.parameters() if p.requires_grad))
+    print("Num params:", sum(p.numel() for p in model.parameters() if p.requires_grad))
     trainer = Trainer(
         model,
         loss_module,
