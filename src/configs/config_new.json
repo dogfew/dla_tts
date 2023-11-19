@@ -1,0 +1,64 @@
+{
+  "name": "fastspeech",
+  "n_gpu": 1,
+  "preprocessing": {
+    "sr": 16000
+  },
+  "arch": {
+    "type": "FastSpeech",
+    "args": {
+    }
+  },
+  "data": {
+      "train": {
+        "batch_size": 64,
+        "num_workers": 4,
+        "datasets": [
+          {
+            "type": "BufferDataset",
+            "args": {
+            }
+          }
+        ]
+      }
+  },
+  "optimizer": {
+    "type": "AdamW",
+    "args": {
+      "lr": 1e-3,
+      "weight_decay": 1e-6
+    }
+  },
+  "loss": {
+    "type": "FastSpeechLoss",
+    "args": {
+    }
+  },
+  "metrics": [
+  ],
+  "lr_scheduler": {
+    "type": "OneCycleLR",
+    "args": {
+      "pct_start": 0.1,
+      "anneal_strategy": "cos",
+      "max_lr": 1e-3,
+      "epochs": 201,
+      "steps_per_epoch": 200
+    }
+  },
+  "trainer": {
+    "epochs": 200,
+    "save_dir": "saved/",
+    "save_period": 5,
+    "verbosity": 2,
+    "monitor": "min val_loss",
+    "early_stop": 100,
+    "visualize": "wandb",
+    "wandb_project": "none",
+    "grad_norm_clip": 1,
+    "log_predictions_step_epoch": 4,
+    "mixed_precision": true,
+    "accumulation_steps":1,
+    "len_epoch": 200
+  }
+}
