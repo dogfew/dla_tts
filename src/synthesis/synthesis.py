@@ -55,6 +55,16 @@ class Synthesizer:
         self.inv_symbols[0] = " "
 
     def __call__(self, model, raw_text, alpha=1.0, beta=1.0, gamma=1.0, idx=0):
+        """
+        :param model: FastSpeech2 model
+        :param raw_text: raw phonemes in ARPA format
+        :param alpha: audio duration control parameter
+        :param beta: audio pitch control parameter
+        :param gamma: audio energy control parameter
+        :param idx: index for file
+        :return: path (str) for waveglow version and for griffin-lim
+        version of audio reconstruction
+        """
         # phn = text.text_to_sequence(raw_text, self.cleaner_names)
         phn = [self.symbols.get(x, 0) for x in raw_text if x in self.symbols]
         text_tensor = torch.tensor(phn, dtype=torch.long, device=self.device).unsqueeze(
@@ -97,6 +107,12 @@ class Synthesizer:
         return str(audio_path), str(audio_path_waveglow)
 
     def create_audios(self, model):
+        """
+        Create audios about defibrilator, MIT etc. with different combinations of parameters
+        :param model: FastSpeech2 model
+        :return: paths for standard audios (list), paths for waveglow audios(list)
+        list of combinations and list of raw texts
+        """
         paths_standard, paths_waveglow, log_combinations, log_texts = [], [], [], []
         with tqdm(
             total=len(raw_texts) * len(combinations), desc="Synthesize audios"
