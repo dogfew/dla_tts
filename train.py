@@ -7,7 +7,6 @@ import numpy as np
 import torch
 
 import src.loss as module_loss
-import src.metric as module_metric
 import src.model as module_arch
 from src.trainer import Trainer
 from src.utils import prepare_device
