@@ -1,8 +1,7 @@
-import sys
 import numpy as np
 from pathlib import Path
+import librosa
 import pyworld as pw
-import torchaudio
 import textgrid
 from tqdm import tqdm
 import src.utils.audio.hparams_audio as ha
@@ -36,8 +35,9 @@ def calculate_durations(textgrid_file):
 
 
 def extract_features(audio_path):
-    wave, sr = torchaudio.load(audio_path)
-    wave = wave.numpy().flatten().astype(np.float64)
+    wave, sr = librosa.load(audio_path)
+    # wave = wave.numpy().flatten().astype(np.float64)
+    wave = wave.flatten().astype(np.float64)
     pitch, t = pw.dio(wave, sr, frame_period=ha.hop_length / sr * 1000)
     pitch = pw.stonemask(wave, pitch, t, sr)
     mel_spec, energy = tools.get_mel_from_wav(wave)
