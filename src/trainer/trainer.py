@@ -10,7 +10,7 @@ from torchvision.transforms import ToTensor
 from tqdm import tqdm
 
 from src.base import BaseTrainer
-from src.logger.utils import plot_spectrogram_to_buf
+from src.logger.utils import plot_spectrogram_to_buf, plot_spectrogram_and_pitch_and_energy_to_buf
 from src.synthesis.synthesis import Synthesizer
 from src.utils import inf_loop, MetricTracker
 from torch.cuda.amp import GradScaler
@@ -143,6 +143,7 @@ class Trainer(BaseTrainer):
             self._log_predictions()
         return log
 
+    @torch.no_grad()
     def debug(self, batch, batch_idx, epoch):
         self.writer.set_step((epoch - 1) * self.len_epoch + batch_idx)
         self.writer.add_scalar(
@@ -252,7 +253,23 @@ class Trainer(BaseTrainer):
     @staticmethod
     def make_image(buff):
         return ToTensor()(PIL.Image.open(buff))
-
+    #
+    # @torch.no_grad()
+    # def _log_spectrogram(self, batch):
+    #     spectrogram_types = ["", "_target"]
+    #     for spectrogram_type in spectrogram_types:
+    #         spectrogram = (
+    #             batch[f"mel{spectrogram_type}"][0]
+    #             .detach()
+    #             .cpu()
+    #             .to(torch.float64)
+    #             .transpose(1, 0)
+    #         )
+    #         spectrogram = torch.nan_to_num(spectrogram)
+    #         self.writer.add_image(
+    #             f"{spectrogram_type or 'pred'}",
+    #             Trainer.make_image(plot_spectrogram_to_buf(spectrogram)),
+    #         )
     @torch.no_grad()
     def _log_spectrogram(self, batch):
         spectrogram_types = ["", "_target"]
@@ -265,9 +282,17 @@ class Trainer(BaseTrainer):
                 .transpose(1, 0)
             )
             spectrogram = torch.nan_to_num(spectrogram)
+            pitch = batch[f"pitch{spectrogram_type if spectrogram_type == '_target' else '_predicted'}"][0].detach().cpu()
+            energy = batch[f"energy{spectrogram_type if spectrogram_type == '_target' else '_predicted'}"][0].detach().cpu()
+            if spectrogram_type == '_target':
+                pitch = pitch.log1p()
+                energy = energy.log1p()
+            pitch = pitch.numpy()
+            energy = energy.numpy()
+            buf = plot_spectrogram_and_pitch_and_energy_to_buf(spectrogram, pitch, energy)
             self.writer.add_image(
                 f"{spectrogram_type or 'pred'}",
-                Trainer.make_image(plot_spectrogram_to_buf(spectrogram)),
+                Trainer.make_image(buf),
             )
 
     @torch.no_grad()
