@@ -1,4 +1,5 @@
 wandb~=0.16.0
+gdown
 numba>0.56
 flashlight-text==0.0.4
 llvmlite>0.39
@@ -8,7 +9,6 @@ wget
 kenlm>=0.2
 pandas~=2.1.3
 Pillow~=10.1.0
-pyctcdecode==0.5.0
 speechbrain>=0.5
 torch>=2
 torch_audiomentations==0.11.0
@@ -17,16 +17,12 @@ torchvision>=0.16
 tqdm~=4.66.1
 torchmetrics[audio]>=1.2.0
 pyloudnorm
-pesq~=0.0.4
 unidecode~=1.3.7
 inflect~=7.0.0
 pyworld~=0.3.4
 g2p_en
-# git+https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner.git
-# git+https://github.com/kaldi-asr/kaldi
 scipy~=1.11.3
 librosa~=0.10.1
-editdistance~=0.6.2
 scikit-learn~=1.2.2
 TextGrid~=1.5
 iteround~=1.0.4
