@@ -17,6 +17,8 @@ gdown https://drive.google.com/u/0/uc?id=1cJKJTmYd905a-9GFoo5gKjzhKjUVj83j
 tar -xvf mel.tar.gz
 echo $(ls mels | wc -l)
 
+gdown 1Vtqk3tE3hcp2cZI76HCipD18jLStVBeP
+unzip MFA.zip
 python generate_data_mfc.py
 #download alignments
 #wget https://github.com/xcmyz/FastSpeech/raw/master/alignments.zip
