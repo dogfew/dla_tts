@@ -21,10 +21,10 @@ def plot_spectrogram_and_pitch_and_energy_to_buf(
     pitch_normalized = pitch / 6.76
     energy_normalized = energy / 5.76
     height = spectrogram.shape[0]
-    pitch_scaled = pitch_normalized * (height - 1)
-    energy_scaled = energy_normalized * (height - 1)
-    pitch_scaled = height - pitch_scaled
-    energy_scaled = height - energy_scaled
+    pitch_scaled = pitch_normalized * height
+    energy_scaled = energy_normalized * height
+    pitch_scaled = pitch_scaled
+    energy_scaled = energy_scaled
 
     ax.plot(pitch_scaled, color=pitch_color, linewidth=2)
     ax.plot(energy_scaled, color=energy_color, linewidth=2)

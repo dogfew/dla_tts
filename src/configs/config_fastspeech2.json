@@ -60,7 +60,7 @@
     "save_period": 20,
     "verbosity": 2,
     "monitor": "min loss",
-    "early_stop": 100,
+    "early_stop": 400,
     "visualize": "wandb",
     "wandb_project": "tts_project",
     "grad_norm_clip": 1,

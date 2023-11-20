@@ -12,10 +12,11 @@ class EnergyRegulator(nn.Module):
     def __init__(self, **kwargs):
         super().__init__()
         self.energy_predictor = VariancePredictor(**kwargs)
-        self.energy_embedding = QuantizationEmbedding(values_range=(0.0177, 5.756))
+        self.energy_min, self.energy_max = 0.0177, 5.756
+        self.energy_embedding = QuantizationEmbedding(values_range=(self.energy_min, self.energy_max))
 
     def forward(self, x, gamma=1.0, target=None, mask=None, **kwargs):
-        energy_pred = self.energy_predictor(x, mask)
+        energy_pred = self.energy_predictor(x, mask).clamp(self.energy_min, self.energy_max)
         embed = self.energy_embedding(
             target if target is not None else energy_pred.expm1() * gamma
         )

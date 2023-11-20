@@ -37,7 +37,8 @@ combinations = [
 
 class Synthesizer:
     def __init__(
-        self, waveglow, device, dir="results", use_arpa=False, samplerate=22050
+        self, waveglow, device, dir="results",
+            use_arpa=False, samplerate=22050
     ):
         self.waveglow = waveglow
         self.device = device
