@@ -25,8 +25,9 @@ You can just run this script and check audios in `final_results/waveglow`
 ```shell
 python test.py
 ```
-You can pass custom text arguments with and create audio with different speed, pitch and energy params. 
-Note, that your text will be processed using `g2p` model from `g2p_en` package, so it can incorrectly spell
+You can pass custom text and create audio with different speed, pitch and energy params. 
+
+**Note:** your text will be processed using `g2p` model from `g2p_en` package, so it can incorrectly spell
 some non-english surnames etc.  
 The out will be here: 
 ```
