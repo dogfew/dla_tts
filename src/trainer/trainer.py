@@ -19,7 +19,7 @@ from src.utils import inf_loop, MetricTracker
 from torch.cuda.amp import GradScaler
 from src.utils import optional_autocast
 from src.waveglow import utils
-from utils.beautiful_phonemes import arpabet_to_ipa
+from src.utils.beautiful_phonemes import arpabet_to_ipa
 
 
 class Trainer(BaseTrainer):
