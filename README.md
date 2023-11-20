@@ -21,22 +21,25 @@ cd ..
 
 ## Speech synthesis
 
+### Generate sentences required in task
 You can just run this script and check audios in `final_results/waveglow`
 ```shell
 python test.py
 ```
+
+### Generate custom sentences 
 You can pass custom text and create audio with different speed, pitch and energy params. 
 
 **Note:** your text will be processed using `g2p` model from `g2p_en` package, so it can incorrectly spell
-some non-english surnames etc.  
-The out will be here: 
-```
-your_dir/waveglow/speed=0.9_pitch=0.9_energy=0.9_id=custom_waveglow.wav
-```
+some non-english surnames etc.
 ```shell
 python test.py --text "I am Vladimir Pere pelkin and this model is named Fast Speech Second" --speed 0.9 --energy 0.9 --pitch 0.9 -o "your_dir"
 ```
 
+The out will be here: 
+```
+your_dir/waveglow/speed=0.9_pitch=0.9_energy=0.9_id=custom_waveglow.wav
+```
 Also you can use arpa phonemes for speech generation with argument `--arpa_input True`
 ```shell
 python test.py --text "Y AA1 N EH1 HH OW1 CH UW1 B OW1 L SH IH0 D OW1 M AA1 SH EH0 K P OW1 G L UW1 B IH1 N N OW1 M UW1 UW1 OW B UW1 CH EH1 N IY0 UW1 V OW1 B R AA1 B OW1 T T K EH1 Z V UW1 K AH0 AH0" --arpa_input True -o "arpa_results"
