@@ -49,7 +49,7 @@ def main(config, args):
             else:
                 preprocessed_phonemes = raw_text.split(' ')
                 preprocessed_phonemes = [i if i != ' ' else '' for i in preprocessed_phonemes]
-            synthesizer(model, preprocessed_phonemes, idx=0, alpha=args.speed, beta=args.pitch, gamma=args.energy)
+            synthesizer(model, preprocessed_phonemes, idx='custom', alpha=args.speed, beta=args.pitch, gamma=args.energy)
         else:
             synthesizer.create_audios(model)
     os.makedirs(os.path.join(output_dir, 'waveglow'), exist_ok=True)
