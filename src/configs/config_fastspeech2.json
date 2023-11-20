@@ -50,17 +50,17 @@
       "pct_start": 0.1,
       "anneal_strategy": "cos",
       "max_lr": 1e-3,
-      "epochs": 502,
+      "epochs": 402,
       "steps_per_epoch": 400
     }
   },
   "trainer": {
-    "epochs": 500,
+    "epochs": 400,
     "save_dir": "saved/",
-    "save_period": 25,
+    "save_period": 20,
     "verbosity": 2,
-    "monitor": "min train_loss",
-    "early_stop": 1000,
+    "monitor": "min loss",
+    "early_stop": 100,
     "visualize": "wandb",
     "wandb_project": "tts_project",
     "grad_norm_clip": 1,

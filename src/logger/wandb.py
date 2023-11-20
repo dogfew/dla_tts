@@ -30,7 +30,7 @@ class WanDBWriter:
         self.mode = ""
         self.timer = datetime.now()
 
-    def set_step(self, step, mode="train"):
+    def set_step(self, step, mode=""):
         self.mode = mode
         self.step = step
         if step == 0:
@@ -41,7 +41,7 @@ class WanDBWriter:
             self.timer = datetime.now()
 
     def _scalar_name(self, scalar_name):
-        return f"{scalar_name}_{self.mode}"
+        return f"{scalar_name}"
 
     def add_scalar(self, scalar_name, scalar):
         self.wandb.log(
@@ -55,7 +55,7 @@ class WanDBWriter:
         self.wandb.log(
             {
                 **{
-                    f"{scalar_name}_{tag}_{self.mode}": scalar
+                    f"{scalar_name}_{tag}": scalar
                     for scalar_name, scalar in scalars.items()
                 }
             },

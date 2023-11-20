@@ -169,7 +169,7 @@ class Trainer(BaseTrainer):
             self.synthesizer.inv_symbols.get(x, " ")
             for x in batch["raw_text"][0].cpu().tolist()
         ]
-        raw_text = " ".join(
+        raw_text = "".join(
             [
                 arpabet_to_ipa.get(
                     arpa_phoneme, arpabet_to_ipa.get(arpa_phoneme[:-1], "<?>")
@@ -316,7 +316,7 @@ class Trainer(BaseTrainer):
                 spectrogram, pitch, energy
             )
             self.writer.add_image(
-                f"{spectrogram_type or 'pred'}",
+                f"spectrogram{spectrogram_type or '_pred'}",
                 Trainer.make_image(buf),
             )
 
