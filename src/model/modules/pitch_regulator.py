@@ -15,8 +15,7 @@ class PitchRegulator(nn.Module):
         )
 
     def forward(self, x, beta=1.0, target=None, mask=None, **kwargs):
-        pitch_pred = self.pitch_predictor(x, mask).clamp(self.pitch_min,
-                                                         self.pitch_max)
+        pitch_pred = self.pitch_predictor(x, mask).clamp(self.pitch_min, self.pitch_max)
         embed = self.pitch_embedding(
             target if target is not None else pitch_pred.expm1() * beta
         )
