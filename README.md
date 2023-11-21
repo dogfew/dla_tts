@@ -1,5 +1,7 @@
 # Speaker Separation Project 
 
+(Also you can check `colab_notebook.ipynb` which is constains commands below for installation, speech synthesis and training, and ready to run in Google-Colab.)
+
 ## Installation
 
 Make shore that your python version >= 3.10
