@@ -51,6 +51,11 @@ You can find output file here:
 arpa_results/waveglow/speed=1.0_pitch=1.0_energy=1.0_id=custom_waveglow.wav
 ```
 
+Using arpa, u even can generate zombie voice!
+```shell
+python test.py --arpa_input True --text "spn spn spn spn spn spn spn spn" --out_dir "zombie voice"
+```
+
 ## Training
 To prepare data, run: 
 ```shell
