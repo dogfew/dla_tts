@@ -13,21 +13,25 @@ class FastSpeech2(nn.Module):
     """FastSpeech2"""
 
     def __init__(
-        self,
-        max_seq_len=3000,
-        decoder_n_layer=4,
-        PAD=0,
-        encoder_head=2,
-        encoder_dim=256,
-        encoder_conv1d_filter_size=1024,
-        dropout=0.1,
-        vocab_size=300,
-        encoder_n_layer=4,
-        decoder_dim=256,
-        duration_predictor_filter_size=256,
-        duration_predictor_kernel_size=3,
-        num_mels=80,
-        **kwargs
+            self,
+            max_seq_len=3000,
+            decoder_n_layer=4,
+            PAD=0,
+            encoder_head=2,
+            encoder_dim=256,
+            encoder_conv1d_filter_size=1024,
+            dropout=0.1,
+            vocab_size=300,
+            encoder_n_layer=4,
+            decoder_dim=256,
+            duration_predictor_filter_size=256,
+            duration_predictor_kernel_size=3,
+            pitch_min=0,
+            pitch_max=6.76,
+            energy_min=0.0177,
+            energy_max=5.756,
+            num_mels=80,
+            **kwargs
     ):
         super().__init__()
 
@@ -49,12 +53,14 @@ class FastSpeech2(nn.Module):
             dropout=dropout,
         )
         self.energy_regulator = EnergyRegulator(
+            energy_min=energy_min, energy_max=energy_max,
             encoder_dim=encoder_dim,
             duration_predictor_filter_size=duration_predictor_filter_size,
             duration_predictor_kernel_size=duration_predictor_kernel_size,
             dropout=dropout,
         )
         self.pitch_regulator = PitchRegulator(
+            pitch_min=pitch_min, pitch_max=pitch_max,
             encoder_dim=encoder_dim,
             duration_predictor_filter_size=duration_predictor_filter_size,
             duration_predictor_kernel_size=duration_predictor_kernel_size,
@@ -82,18 +88,18 @@ class FastSpeech2(nn.Module):
         return mel_output.masked_fill(mask, 0.0)
 
     def forward(
-        self,
-        src_seq,
-        src_pos,
-        mel_pos=None,
-        mel_max_length=None,
-        duration=None,
-        pitch_target=None,
-        energy_target=None,
-        alpha=1.0,
-        beta=1.0,
-        gamma=1.0,
-        **kwargs
+            self,
+            src_seq,
+            src_pos,
+            mel_pos=None,
+            mel_max_length=None,
+            duration=None,
+            pitch_target=None,
+            energy_target=None,
+            alpha=1.0,
+            beta=1.0,
+            gamma=1.0,
+            **kwargs
     ):
         x, non_pad_mask = self.encoder(src_seq, src_pos)
         if self.training:

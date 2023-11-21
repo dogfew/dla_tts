@@ -6,9 +6,9 @@ from src.model.modules.variance_predictor import VariancePredictor
 class PitchRegulator(nn.Module):
     """Length Regulator"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, pitch_min=0, pitch_max=6.76, **kwargs):
         super().__init__()
-        self.pitch_min, self.pitch_max = 0, 6.76
+        self.pitch_min, self.pitch_max = pitch_min, pitch_max
         self.pitch_predictor = VariancePredictor(**kwargs)
         self.pitch_embedding = QuantizationEmbedding(
             values_range=(self.pitch_min, self.pitch_max), large_zero=False

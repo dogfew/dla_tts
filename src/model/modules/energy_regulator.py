@@ -9,10 +9,10 @@ from src.model.modules.variance_predictor import VariancePredictor
 class EnergyRegulator(nn.Module):
     """Length Regulator"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, energy_min=0.0177, energy_max=5.756, **kwargs):
         super().__init__()
         self.energy_predictor = VariancePredictor(**kwargs)
-        self.energy_min, self.energy_max = 0.0177, 5.756
+        self.energy_min, self.energy_max = energy_min, energy_max
         self.energy_embedding = QuantizationEmbedding(
             values_range=(self.energy_min, self.energy_max)
         )
