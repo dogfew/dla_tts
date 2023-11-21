@@ -44,18 +44,6 @@ def reprocess_tensor(batch):
     return out
 
 
-def collate_fn(batch, expand_size=16):
-    len_arr = torch.tensor([d["text"].size(0) for d in batch])
-    index_arr = torch.argsort(-len_arr)
-    real_batch_size = len(batch) // expand_size
-    cut_lists = [
-        index_arr[i * real_batch_size : (i + 1) * real_batch_size]
-        for i in range(expand_size)
-    ]
-    res = [reprocess_tensor([batch[i] for i in cut_list]) for cut_list in cut_lists]
-    return res
-
-
 def collate_fn(batch):
     processed_batch = reprocess_tensor(batch)
     return processed_batch
