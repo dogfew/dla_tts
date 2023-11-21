@@ -19,29 +19,22 @@ def process_text(train_text_path):
 class BufferDataset(Dataset):
     def __init__(self, data_path, **kwargs):
         self.g2p = G2p()
-        # self.arpa = lambda x: ' '.join(['{' + ''.join(self.g2p(i)) + '}' for i in x.split()])
         self.symbols = {" ": 0, "": 0, "spn": 1} | {
             k: v for v, k in enumerate(self.g2p.phonemes)
         }
         buffer = self.get_data_to_buffer(data_path)
-        self.buffer = buffer  # [:64]
+        self.buffer = buffer
         self.length_dataset = len(self.buffer)
-        # self.symbols = {' ': 0} | {k: v + 1 for v, k in enumerate(valid_symbols)}
 
     def get_data_to_buffer(self, data_path):
         text = process_text(os.path.join(data_path, "train.txt"))
-        # text = [self.arpa(x) for x in text[:10]]
         text = text
         start = time.perf_counter()
         buffer = [
             {
-                # "text": torch.from_numpy(np.array(
-                #     text_to_sequence(t[0: len(t) - 1], train_config.text_cleaners))
-                # ),
                 "text": torch.from_numpy(
                     np.array([self.symbols[x] for x in t.replace("\n", "").split(" ")])
                 ),
-                # "duration": torch.from_numpy(np.load(os.path.join(train_config.alignment_path, f"{i}.npy"))),
                 "duration": torch.from_numpy(
                     np.load(
                         os.path.join(data_path, f"alignments/alignment-{i + 1:05d}.npy")

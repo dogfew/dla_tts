@@ -46,8 +46,6 @@ class Synthesizer:
         os.makedirs(dir, exist_ok=True)
         self.dir = Path(dir)
         self.g2p = G2p()
-        # self.arpa = lambda x: ' '.join(['{' + ''.join(self.g2p(x)) + '}' for i in x]) if use_arpa else lambda x: x
-        # self.symbols = {' ': 0} | {k: v + 1 for v, k in enumerate(valid_symbols)}
         self.symbols = {" ": 0, "": 0, "spn": 1} | {
             k: v for v, k in enumerate(self.g2p.phonemes)
         }
@@ -65,7 +63,6 @@ class Synthesizer:
         :return: path (str) for waveglow version and for griffin-lim
         version of audio reconstruction
         """
-        # phn = text.text_to_sequence(raw_text, self.cleaner_names)
         phn = [self.symbols.get(x, 0) for x in raw_text if x in self.symbols]
         text_tensor = torch.tensor(phn, dtype=torch.long, device=self.device).unsqueeze(
             0
