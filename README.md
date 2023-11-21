@@ -4,7 +4,7 @@
 
 ## Installation
 
-Make shore that your python version >= 3.10
+Make sure that your python version >= 3.10
 
 Run commands in `evaluate_script.sh`
 ```shell 
