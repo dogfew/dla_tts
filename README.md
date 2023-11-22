@@ -1,4 +1,4 @@
-# Speaker Separation Project 
+# Text to Speech project
 
 (Also, you can check `colab_notebook.ipynb` file, which contains commands for installation, speech synthesis, and training, and is ready to run in Google Colab)
 
