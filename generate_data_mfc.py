@@ -25,7 +25,7 @@ def calculate_durations(textgrid_file):
     durations = []
     phonemes = []
     for interval in tg[1].intervals:
-        # this is constant for consistency of durations with other things
+        # this is constant for consistency of durations with other things (sample_rate / hop_length) = 22050 / 256
         duration = (interval.maxTime - interval.minTime) * 86.1328125
         durations.append(duration)
         phonemes.append(interval.mark)
